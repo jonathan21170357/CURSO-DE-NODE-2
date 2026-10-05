@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const estudiantesController = require('../controllers/estudiantesController.js');
 
-router.get('/', estudiantesController.ingresar);
+router.get('/', estudiantesController.consultar);
 
 router.post('/', estudiantesController.ingresar);
 

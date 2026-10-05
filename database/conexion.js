@@ -5,11 +5,11 @@ const db = mysql.createConnection(
         host: 'mi-base-datos-mi-base-datos.i.aivencloud.com',
         port: '11605',
         user: 'avnadmin',
-        //password: '',//'AVNS_EyoyNNHT3A4TnM8ZcuF',
-        //database: 'defaultdb',
-        //ssl: {
-        //rejectUnauthorized: false
-        //}
+        //password: 'AVNS_EyoyNNHT3A4TnM8ZcuF',
+        database: 'defaultdb',
+        ssl: {
+        rejectUnauthorized: false
+        }
     }   
 )
 

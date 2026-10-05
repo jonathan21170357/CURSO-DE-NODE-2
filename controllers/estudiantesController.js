@@ -6,12 +6,32 @@ class estudiantesController {
     }
 
     consultar(req, res){
-        res.json({msg: 'Consulta estudiantes desde clase'});
+        try{ db.query('SELECT * FROM estudiantes', 
+            (err, rows) => {
+                if(err){
+                    res.status(400).send(err.message);
+                }
+                res.status(200).json(rows);
+            });
+
+        } catch(err) {
+            res.status(500).send(err.message); 
+        }
     }
 
     consultarDetalle(req, res){
         const {id } = req.params;
-        res.json({msg: `Consulta detalle estudiante desde clase con id ${id}`});
+        try{ db.query(`SELECT * FROM estudiantes WHERE id = ?`, [id], 
+            (err, rows) => {
+                if(err){
+                    res.status(400).send(err.message);
+                }
+                res.status(200).json(rows[0]);
+            });
+
+        } catch(err) {
+            res.status(500).send(err.message); 
+        }
     }
 
     ingresar(req, res){
@@ -22,21 +42,50 @@ class estudiantesController {
         VALUES (null, ?, ?, ?, ?);`, 
             [dni, nombre, apellido, email],(err, rows) => {
                 if(err){
-                    res.status(400).send(err);
+                    res.status(400).send(err.message);
+                }else {
+                    res.status(201).json( {id: rows.insertId});
                 }
-                res.status(201).json(rows);
             } );
         } catch(err) {
-            res.status(500).send(err); 
+            res.status(500).send(err.message); 
         }
     }
 
-    actualizar(req, res){
-        res.json({msg: 'Actualiza estudiante desde clase'});
+    actualizar(req, res) {
+        const { id } = req.params;
+        try { 
+            const { dni, nombre, apellido, email } = req.body;
+
+            db.query(`UPDATE FROM estudiantes 
+            SET dni = ?, nombre = ?, apellido = ?, email = ? 
+            WHERE id = ?`,
+            [dni, nombre, apellido, email, id], (err, rows) => {
+                if (err) {
+                    return res.status(400).send(err.message);
+                }
+                if(rows.affectedRows == 1)
+                res.status(201).json({respuesta: 'Registro actualizado con éxito'});
+            });
+        } catch(err) {
+            res.status(500).send(err.message); 
+        }
     }
 
     borrar(req, res){
-        res.json({msg: 'Borra estudiante desde clase'});
+        const { id } = req.params;
+        try { 
+            db.query(`DELETE FROM estudiantes WHERE id = ?`,
+            [id], (err, rows) => {
+                if (err) {
+                    return res.status(400).send(err.message);
+                }
+                if(rows.affectedRows == 1)
+                res.status(200).json({respuesta: 'Registro borrado con éxito'});
+            });
+        } catch(err) {
+            res.status(500).send(err.message); 
+        }
     }
 
 
